@@ -136,7 +136,7 @@ class ezcArchiveUstarHeader extends ezcArchiveV7Header
      *
      * @param ezcArchiveBlockFile $file
      */
-    public function __construct( ezcArchiveBlockFile $file = null )
+    public function __construct( ?ezcArchiveBlockFile $file = null )
     {
        // Offset | Field size |  Description
         // ----------------------------------
@@ -345,6 +345,17 @@ class ezcArchiveUstarHeader extends ezcArchiveV7Header
         {
             $posixName = ( posix_getpwuid( $this->userId ) );
             $posixGroup = ( posix_getgrgid( $this->groupId ) );
+
+            // An ID without an entry in the user or group database is
+            // written with an empty name, as before, without the notice.
+            if ( $posixName === false )
+            {
+                $posixName = array( 'name' => '' );
+            }
+            if ( $posixGroup === false )
+            {
+                $posixGroup = array( 'name' => '' );
+            }
         }
         else
         {

@@ -1,3 +1,25 @@
+1.5.2 - unreleased
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Renamed: The package is now se7enxweb/expcomponents-archive (repository
+  github.com/se7enxweb/expcomponents-archive), a maintained fork of
+  zetacomponents/Archive. It replaces zetacomponents/archive, so existing
+  requirements keep working; the class names (ezcArchive*) are unchanged.
+- Fixed: No deprecation notices on PHP 8.1 to 8.5. Parameters with a null
+  default are explicitly nullable, the Iterator methods carry
+  #[\ReturnTypeWillChange], and ezcArchiveEntry no longer passes null to
+  substr(), strlen() or strcmp() for an entry without a link.
+- Fixed: Long file names and long link names in GNU tar archives no longer
+  keep the terminating NUL byte, so such entries extract again (PHP 8 refused
+  the name with a ValueError, PHP 7 could not find the link target).
+- Fixed: Appending to a ustar archive no longer raises a notice when the
+  file's user or group ID has no entry in the user or group database; the
+  name is written empty, as before.
+- Added: A test that loads every class in a fresh process and fails on any
+  deprecation, and a GitHub Actions workflow running the suite on PHP 7.4
+  to 8.5.
+
+
 1.5.1 - Thursday 23 February 2023
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

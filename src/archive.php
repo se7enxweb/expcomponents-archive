@@ -194,7 +194,7 @@ abstract class ezcArchive implements Iterator
      *
      * @return ezcArchive
      */
-    public static function open( $archiveName, $forceType = null, ezcArchiveOptions $options = null )
+    public static function open( $archiveName, $forceType = null, ?ezcArchiveOptions $options = null )
     {
         $options = self::initOptions( $options );
 
@@ -299,7 +299,7 @@ abstract class ezcArchive implements Iterator
      *                     {@link ezcArchiveV7Tar}, {@link ezcArchivePax},
      *                     {@link ezcArchiveGnuTar}, or {@link ezcArchiveUstar}.
      */
-    protected static function createInstance( $archiveName, $type, ezcArchiveOptions $options = null )
+    protected static function createInstance( $archiveName, $type, ?ezcArchiveOptions $options = null )
     {
         $options = self::initOptions( $options );
 
@@ -400,6 +400,7 @@ abstract class ezcArchive implements Iterator
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return ( $this->fileNumber >= 0 && $this->fileNumber < $this->entriesRead );
@@ -410,6 +411,7 @@ abstract class ezcArchive implements Iterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->fileNumber = 0;
@@ -420,6 +422,7 @@ abstract class ezcArchive implements Iterator
      *
      * @return ezcArchiveEntry
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return ( $this->valid() ? $this->entries[$this->fileNumber] : false );
@@ -430,6 +433,7 @@ abstract class ezcArchive implements Iterator
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return ( $this->valid() ? $this->fileNumber : false );
@@ -445,6 +449,7 @@ abstract class ezcArchive implements Iterator
      *
      * @return ezcArchiveEntry  The next entry if it exists, otherwise false.
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if ( $this->valid() )

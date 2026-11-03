@@ -56,7 +56,7 @@ class ezcArchiveGnuHeader extends ezcArchiveUstarHeader
      *
      * @param ezcArchiveBlockFile $file
      */
-    public function __construct( ezcArchiveBlockFile $file = null )
+    public function __construct( ?ezcArchiveBlockFile $file = null )
     {
         if ( !is_null( $file ) )
         {
@@ -123,7 +123,10 @@ class ezcArchiveGnuHeader extends ezcArchiveUstarHeader
         $data .= substr( $file->next(), 0, $rest );
 
         $file->next();
-        return $data;
+
+        // GNU tar counts the terminating NUL in the size of a long name or
+        // long link; it is not part of the name.
+        return rtrim( $data, "\0" );
     }
 }
 ?>

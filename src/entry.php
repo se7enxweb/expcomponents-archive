@@ -232,18 +232,18 @@ class ezcArchiveEntry
      */
     private function getPathWithoutPrefix( $completePath, $prefix )
     {
-        $prefixLength = strlen( $prefix );
+        $prefixLength = strlen( (string) $prefix );
 
-        if ( strcmp( substr( $completePath, 0,  $prefixLength ), $prefix ) == 0 )
+        if ( strcmp( substr( (string) $completePath, 0,  $prefixLength ), (string) $prefix ) == 0 )
         {
             $i = 0;
             // Check next character
-            while ( $completePath[$i + $prefixLength] == "/" )
+            while ( isset( $completePath[$i + $prefixLength] ) && $completePath[$i + $prefixLength] == "/" )
             {
                 $i++;
             }
 
-            $result = substr( $completePath, $prefixLength + $i );
+            $result = substr( (string) $completePath, $prefixLength + $i );
             return $result;
         }
         else

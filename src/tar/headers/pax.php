@@ -122,7 +122,7 @@ class ezcArchivePaxHeader extends ezcArchiveUstarHeader
      *
      * @param ezcArchiveBlockFile $file
      */
-    public function __construct( ezcArchiveBlockFile $file = null )
+    public function __construct( ?ezcArchiveBlockFile $file = null )
     {
         if ( !is_null( $file ) )
         {

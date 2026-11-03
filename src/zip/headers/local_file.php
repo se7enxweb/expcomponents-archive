@@ -318,7 +318,7 @@ class ezcArchiveLocalFileHeader
      *
      * @param ezcArchiveCharacterFile $file
      */
-    public function __construct( ezcArchiveCharacterFile $file = null, ezcArchiveCentralDirectoryHeader $centralHeader = null )
+    public function __construct( ?ezcArchiveCharacterFile $file = null, ?ezcArchiveCentralDirectoryHeader $centralHeader = null )
     {
         // Offset | Field size |  Description
         // ----------------------------------

@@ -172,7 +172,7 @@ class ezcArchiveV7Header
      *         if the checksum from the file did not match the calculated one
      * @param ezcArchiveBlockFile $file
      */
-    public function __construct( ezcArchiveBlockFile $file = null )
+    public function __construct( ?ezcArchiveBlockFile $file = null )
     {
         // Offset | Field size |  Description
         // ----------------------------------

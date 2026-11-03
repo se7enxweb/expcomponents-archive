@@ -170,6 +170,7 @@ class ezcArchiveBlockFile extends ezcArchiveFile
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->blockNumber = -1;
@@ -184,6 +185,7 @@ class ezcArchiveBlockFile extends ezcArchiveFile
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return ( $this->isValid ? $this->blockData : false );
@@ -196,6 +198,7 @@ class ezcArchiveBlockFile extends ezcArchiveFile
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if ( $this->isValid  )
@@ -234,6 +237,7 @@ class ezcArchiveBlockFile extends ezcArchiveFile
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return ( $this->isValid ? $this->blockNumber : false );
@@ -244,6 +248,7 @@ class ezcArchiveBlockFile extends ezcArchiveFile
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->isValid;

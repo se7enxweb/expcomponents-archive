@@ -108,7 +108,7 @@ class ezcArchiveCentralDirectoryHeader extends ezcArchiveLocalFileHeader
      *
      * @param ezcArchiveCharacterFile $file
      */
-    public function __construct( ezcArchiveCharacterFile $file = null )
+    public function __construct( ?ezcArchiveCharacterFile $file = null )
     {
         if ( !is_null( $file ) )
         {

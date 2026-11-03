@@ -125,6 +125,7 @@ class ezcArchiveCharacterFile extends ezcArchiveFile
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         parent::rewind();
@@ -139,6 +140,7 @@ class ezcArchiveCharacterFile extends ezcArchiveFile
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return ( $this->isValid ? $this->character : false );
@@ -151,6 +153,7 @@ class ezcArchiveCharacterFile extends ezcArchiveFile
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if ( $this->isValid  )
@@ -177,6 +180,7 @@ class ezcArchiveCharacterFile extends ezcArchiveFile
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return ( $this->isValid ? ftell( $this->fp ) - 1 : false );
@@ -199,6 +203,7 @@ class ezcArchiveCharacterFile extends ezcArchiveFile
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->isValid;

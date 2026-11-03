@@ -378,6 +378,7 @@ abstract class ezcArchiveFile implements Iterator
      * Rewind the current file, and the current() method will return the
      * data from the first block, if available.
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         if ( !is_null( $this->fp ) )
