@@ -1,0 +1,40 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  phpunit:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: bz2, posix, zlib
+          ini-values: error_reporting=-1, display_errors=On, zend.assertions=1
+          coverage: none
+
+      - name: Lint every source file and fail on compile-time deprecations
+        run: |
+          status=0
+          for file in $(find src tests -name '*.php' -not -path 'tests/*/testfiles/*' -not -path 'tests/data/*'); do
+            out=$(php -d error_reporting=-1 -l "$file" 2>&1) || status=1
+            if echo "$out" | grep -qi 'deprecated'; then echo "$out"; status=1; fi
+          done
+          exit $status
+
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Run the test suite (deprecations fail the build)
+        run: vendor/bin/phpunit
