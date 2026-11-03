@@ -1,8 +1,8 @@
 {
-    "name": "zetacomponents/archive",
+    "name": "se7enxweb/expcomponents-archive",
     "type": "library",
     "description": "The component allows you to create, modify, and extract archive files of  various formats.  The currently supported archives formats are Tar (with  the flavours: ustar, v7, pax, and gnu) and Zip.",
-    "homepage": "https://github.com/zetacomponents",
+    "homepage": "https://github.com/se7enxweb/expcomponents-archive",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -43,7 +43,11 @@
     },
 	"minimum-stability": "dev",
     "require": {
+        "php": ">=7.1",
         "zetacomponents/base": "~1.8"
+    },
+    "replace": {
+        "zetacomponents/archive": "self.version"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
