@@ -29,6 +29,8 @@ vendor/bin/phpunit
 ```
 
 The suite runs on every push for PHP 7.4, 8.0, 8.1, 8.2, 8.3, 8.4 and 8.5, and any
-deprecation fails it. Some tests call the `tar`, `gzip` and `bzip2` executables.
+deprecation fails it. Some tests call the `tar`, `gzip` and `bzip2` executables and
+compare archives byte for byte with the output of GNU tar 1.34; GNU tar 1.35 leaves the
+device number fields of regular files empty, so those tests fail with it.
 
 Known limitations of the component are listed in `README`.
