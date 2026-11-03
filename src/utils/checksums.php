@@ -199,6 +199,10 @@ class ezcArchiveChecksums
         // CRC-32 in PKZip, WinZip and Ethernet.
         $polynomial = 0x04c11db7;
 
+        // The property starts as false; turning false into an array
+        // implicitly is deprecated as of PHP 8.1.
+        self::$crc32Table = array();
+
         // 256 values representing ASCII character codes.
         for ( $i = 0; $i <= 0xFF; ++$i )
         {

@@ -204,11 +204,11 @@ class ezcArchiveV7Header
                                         "{$formatCode}1type/".
                                         "{$formatCode}100linkName", $file->current() );
 
-            $this->properties["userId"]   = octdec( $this->properties["userId"] );
-            $this->properties["groupId"]  = octdec( $this->properties["groupId"] );
-            $this->properties["fileSize"]  = octdec( $this->properties["fileSize"] );
-            $this->properties["modificationTime"]  = octdec( $this->properties["modificationTime"] );
-            $this->properties["checksum"]  = octdec( $this->properties["checksum"] );
+            $this->properties["userId"]   = self::octalToDecimal( $this->properties["userId"] );
+            $this->properties["groupId"]  = self::octalToDecimal( $this->properties["groupId"] );
+            $this->properties["fileSize"]  = self::octalToDecimal( $this->properties["fileSize"] );
+            $this->properties["modificationTime"]  = self::octalToDecimal( $this->properties["modificationTime"] );
+            $this->properties["checksum"]  = self::octalToDecimal( $this->properties["checksum"] );
 
             if ( !$this->checksum( $this->checksum, $file->current() ) )
             {
@@ -409,6 +409,21 @@ class ezcArchiveV7Header
         $struct->mtime = $this->modificationTime;
         $struct->mode = $this->fileMode;
         $struct->size = $this->fileSize;
+    }
+
+    /**
+     * Returns the decimal value of the octal number in a header field.
+     *
+     * Header fields are padded with spaces or NUL bytes. octdec() ignores
+     * those, but PHP 7.4 and later report them as deprecated; they are
+     * removed first, so the result is the same.
+     *
+     * @param string $value
+     * @return int|float
+     */
+    protected static function octalToDecimal( $value )
+    {
+        return octdec( preg_replace( '/[^0-7]/', '', (string) $value ) );
     }
 }
 ?>

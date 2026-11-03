@@ -9,6 +9,12 @@
   default are explicitly nullable, the Iterator methods carry
   #[\ReturnTypeWillChange], and ezcArchiveEntry no longer passes null to
   substr(), strlen() or strcmp() for an entry without a link.
+- Fixed: Reading a tar header no longer passes space or NUL padding to
+  octdec() (deprecated since PHP 7.4); the decoded values are the same.
+- Fixed: The CRC-32 table used for Zip archives is built as an array from
+  the start, instead of turning false into an array (deprecated since
+  PHP 8.1). An error handler that throws on deprecations left the table
+  incomplete, with "Undefined array key" warnings after it.
 - Fixed: Long file names and long link names in GNU tar archives no longer
   keep the terminating NUL byte, so such entries extract again (PHP 8 refused
   the name with a ValueError, PHP 7 could not find the link target).
