@@ -45,6 +45,8 @@ class ezcArchiveV7TarTest extends ezcArchiveTestCase
     protected $tarMimeFormat;
     protected $usersGid;
 
+    protected $ownerUid;
+
     public function createTempFile( $file )
     {
         $original = dirname(__FILE__) . "/../data/$file";
@@ -78,8 +80,10 @@ class ezcArchiveV7TarTest extends ezcArchiveTestCase
 
     protected function setUsersGid()
     {
-        // figure out the GID for "users" for tests
-        $this->usersGid = 1000; // default
+        // Only root extracts files with the owner stored in the archive
+        // (uid 1000, group "users"); anyone else owns what they extract.
+        $this->ownerUid = posix_geteuid() === 0 ? 1000 : posix_geteuid();
+        $this->usersGid = posix_getegid();
         if ( posix_geteuid() === 0 && function_exists( 'posix_getgrnam' ) )
         {
             $info = posix_getgrnam( 'users' );
@@ -317,7 +321,7 @@ class ezcArchiveV7TarTest extends ezcArchiveTestCase
 
         $stat = stat( "$dir/php/files/bla/file3.txt" );
         $this->assertEquals( 0644, $stat['mode'] & 07777 );
-        $this->assertEquals( 1000, $stat['uid'] );
+        $this->assertEquals( $this->ownerUid, $stat['uid'] );
         $this->assertEquals( $this->usersGid, $stat['gid'] );
     }
 
@@ -350,12 +354,12 @@ class ezcArchiveV7TarTest extends ezcArchiveTestCase
 
         $stat = stat( "$dir/php/files/bla/file3.txt" );
         $this->assertEquals( 0600, $stat['mode'] & 07777 );
-        $this->assertEquals( 1000, $stat['uid'] );
+        $this->assertEquals( $this->ownerUid, $stat['uid'] );
         $this->assertEquals( $this->usersGid, $stat['gid'] );
 
         $stat = stat( "$dir/php/files/bla" );
         $this->assertEquals( 0700, $stat['mode'] & 07777 );
-        $this->assertEquals( 1000, $stat['uid'] );
+        $this->assertEquals( $this->ownerUid, $stat['uid'] );
         $this->assertEquals( $this->usersGid, $stat['gid'] );
     }
 
@@ -1092,10 +1096,12 @@ class ezcArchiveV7TarTest extends ezcArchiveTestCase
         mkdir ( $src );
 
         $files = array();
+        $paths = array();
         do
         {
             $this->complexArchive->extractCurrent( $src );
             $files[] =  $src . '/'. $this->complexArchive->current()->getPath();
+            $paths[] = escapeshellarg( $this->complexArchive->current()->getPath() );
         } while ( $this->complexArchive->next() );
 
         $mytar = "$dir/my_archive.tar";
@@ -1103,7 +1109,9 @@ class ezcArchiveV7TarTest extends ezcArchiveTestCase
         $archive = ezcArchive::getTarInstance( $bf, $this->tarMimeFormat );
         $archive->appendToCurrent( $files, $src );
         $archive->close();
-        exec( "tar -cf $dir/gnutar.tar --format=" . $this->tarFormat . " -C $src files" );
+        // Name every entry in the same order, rather than letting tar walk
+        // the directory in whatever order the file system returns.
+        exec( "tar -cf $dir/gnutar.tar --format=" . $this->tarFormat . " --no-recursion -C $src " . implode( ' ', $paths ) );
 
         $this->assertEquals( file_get_contents( "$dir/gnutar.tar" ), file_get_contents( $mytar ) );
         unset( $archive );
