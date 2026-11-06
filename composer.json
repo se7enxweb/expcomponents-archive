@@ -41,10 +41,10 @@
             "src"
         ]
     },
-	"minimum-stability": "dev",
+    "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
-        "zetacomponents/base": "~1.8"
+        "se7enxweb/expcomponents-base": "~1.8"
     },
     "replace": {
         "zetacomponents/archive": "self.version"
