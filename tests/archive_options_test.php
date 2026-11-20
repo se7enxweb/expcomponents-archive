@@ -57,6 +57,28 @@ class ezcArchiveOptionsTest extends ezcTestCase
         }
     }
 
+    public function testSkipUnsafeEntries()
+    {
+        $options = new ezcArchiveOptions;
+        self::assertFalse( $options->skipUnsafeEntries );
+        $options->skipUnsafeEntries = true;
+        self::assertTrue( $options->skipUnsafeEntries );
+    }
+
+    public function testSkipUnsafeEntriesWrong()
+    {
+        try
+        {
+            $options = new ezcArchiveOptions;
+            $options->skipUnsafeEntries = 1;
+            self::fail( 'Expected exception not thrown' );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            self::assertEquals( "The value '1' that you were trying to assign to setting 'skipUnsafeEntries' is invalid. Allowed values are: bool.", $e->getMessage() );
+        }
+    }
+
     public function testCallback()
     {
         $options = new ezcArchiveOptions;
