@@ -1,3 +1,31 @@
+1.5.4 - Wednesday 25 November 2026
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed: The GNU tar reader no longer loops forever on unknown header types
+  (pull request #1).
+- Fixed: GNU long names whose size is a multiple of 512 are read correctly
+  (pull request #2).
+- Fixed: Tar extension headers are limited in size and checked for truncation
+  (pull request #3).
+- Fixed: An empty GNU long name or link no longer replaces the header's name
+  (pull request #4).
+- Fixed: PAX extended headers are read completely and strictly
+  (pull request #5), and the GNU tar reader applies them (pull request #6).
+- Fixed: Extracting refuses entries that would be written outside the target
+  directory (path traversal through "..", absolute paths or symbolic links)
+  (pull request #7).
+- Fixed: Extracting no longer applies setuid, setgid and sticky bits
+  (pull request #8).
+
+  BEHAVIOUR CHANGE: a malformed or hostile archive (an unknown or truncated
+  header, an oversized extension header, an invalid PAX record, an entry that
+  would land outside the target) now throws an ezcArchive exception where it
+  was read or extracted silently, wrongly, or looped. Callers that open
+  archives from untrusted sources (package imports, uploads) should catch
+  ezcArchiveException and report it. Extracted files keep their permission
+  bits without setuid, setgid and sticky.
+
+
 1.5.3 - Friday 6 November 2026
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
