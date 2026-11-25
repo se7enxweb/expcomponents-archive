@@ -33,6 +33,11 @@
  *           Callback object to be used for every directory and file creation
  *           action, so that permissions, user and group may be changed
  *           depending on user preferences. See {@link ezcArchiveCallback}.
+ * @property bool $preserveSpecialPermissions
+ *           Whether extracted files and directories keep the setuid, setgid
+ *           and sticky bits from the archive. Defaults to false: the bits are
+ *           removed, so that extracting an archive cannot create setuid
+ *           programs.
  * @property bool $skipUnsafeEntries
  *           Whether extracting skips entries that would be written outside of
  *           the target directory (an absolute path, a ".." component, a
@@ -59,6 +64,7 @@ class ezcArchiveOptions extends ezcBaseOptions
     {
         $this->readOnly = false;
         $this->extractCallback = null;
+        $this->preserveSpecialPermissions = false;
         $this->skipUnsafeEntries = false;
 
         parent::__construct( $options );
@@ -80,6 +86,7 @@ class ezcArchiveOptions extends ezcBaseOptions
         switch ( $name )
         {
             case 'readOnly':
+            case 'preserveSpecialPermissions':
             case 'skipUnsafeEntries':
                 if ( !is_bool( $value ) )
                 {

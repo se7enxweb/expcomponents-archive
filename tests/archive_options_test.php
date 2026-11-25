@@ -57,6 +57,28 @@ class ezcArchiveOptionsTest extends ezcTestCase
         }
     }
 
+    public function testPreserveSpecialPermissions()
+    {
+        $options = new ezcArchiveOptions;
+        self::assertFalse( $options->preserveSpecialPermissions );
+        $options->preserveSpecialPermissions = true;
+        self::assertTrue( $options->preserveSpecialPermissions );
+    }
+
+    public function testPreserveSpecialPermissionsWrong()
+    {
+        try
+        {
+            $options = new ezcArchiveOptions;
+            $options->preserveSpecialPermissions = 1;
+            self::fail( 'Expected exception not thrown' );
+        }
+        catch ( ezcBaseValueException $e )
+        {
+            self::assertEquals( "The value '1' that you were trying to assign to setting 'preserveSpecialPermissions' is invalid. Allowed values are: bool.", $e->getMessage() );
+        }
+    }
+
     public function testSkipUnsafeEntries()
     {
         $options = new ezcArchiveOptions;

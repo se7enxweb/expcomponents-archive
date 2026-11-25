@@ -492,7 +492,9 @@ abstract class ezcArchive implements Iterator
      * to a file outside of $target are refused with an
      * {@link ezcArchiveValueException}. With the option
      * {@link ezcArchiveOptions::$skipUnsafeEntries} such an entry is skipped
-     * instead and false is returned.
+     * instead and false is returned. The setuid, setgid and sticky bits are
+     * removed from the permissions, unless the option
+     * {@link ezcArchiveOptions::$preserveSpecialPermissions} is set.
      *
      * @throws ezcArchiveValueException     if the archive contains invalid values,
      *                                      or if the entry would be written outside of $target
@@ -630,7 +632,7 @@ abstract class ezcArchive implements Iterator
                         {
                             $permissions = '0777';
                         }
-                        mkdir( $fileName, octdec( $permissions ), true );
+                        mkdir( $fileName, $this->filterPermissions( octdec( $permissions ) ), true );
                         break;
 
                     case ezcArchiveEntry::IS_FILE:
@@ -659,7 +661,8 @@ abstract class ezcArchive implements Iterator
                     $group = $entry->getGroupId();
                     $user  = $entry->getUserId();
                     $time  = $entry->getModificationTime();
-                    $perms = octdec( $entry->getPermissions() );
+                    $mode  = octdec( $entry->getPermissions() );
+                    $perms = $this->filterPermissions( $mode );
 
                     if ( $this->options && $this->options->extractCallback )
                     {
@@ -673,7 +676,11 @@ abstract class ezcArchive implements Iterator
                         @chown( $fileName, $user );
                     }
 
-                    if ( $perms != false )
+                    // An entry without any permission bits (a ZIP archive made
+                    // on Windows, for example) keeps the default permissions.
+                    // Permissions that are 0 only after removing the special
+                    // bits (mode 4000) are applied.
+                    if ( $perms !== false && $perms !== null && ( $perms != 0 || $mode != 0 ) )
                     {
                         chmod( $fileName, $perms );
                     }
@@ -888,6 +895,23 @@ abstract class ezcArchive implements Iterator
         $realDirectory = rtrim( $realDirectory, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR;
         return $realPath . DIRECTORY_SEPARATOR === $realDirectory ||
                strncmp( $realPath, $realDirectory, strlen( $realDirectory ) ) === 0;
+    }
+
+    /**
+     * Returns the permissions $permissions without the setuid, setgid and
+     * sticky bits, unless the option preserveSpecialPermissions is set.
+     *
+     * @param int $permissions
+     * @return int
+     */
+    protected function filterPermissions( $permissions )
+    {
+        if ( $this->options && $this->options->preserveSpecialPermissions )
+        {
+            return $permissions;
+        }
+
+        return $permissions & 0777;
     }
 
     /**
