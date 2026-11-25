@@ -33,6 +33,13 @@
  *           Callback object to be used for every directory and file creation
  *           action, so that permissions, user and group may be changed
  *           depending on user preferences. See {@link ezcArchiveCallback}.
+ * @property bool $skipUnsafeEntries
+ *           Whether extracting skips entries that would be written outside of
+ *           the target directory (an absolute path, a ".." component, a
+ *           symbolic link from the archive in the path, a hard link to a file
+ *           outside), instead of throwing an ezcArchiveValueException.
+ *           Defaults to false. With true, extractCurrent() returns false for
+ *           such an entry and extract() goes on with the next one.
  *
  * @package Archive
  * @version //autogen//
@@ -52,6 +59,7 @@ class ezcArchiveOptions extends ezcBaseOptions
     {
         $this->readOnly = false;
         $this->extractCallback = null;
+        $this->skipUnsafeEntries = false;
 
         parent::__construct( $options );
     }
@@ -72,6 +80,7 @@ class ezcArchiveOptions extends ezcBaseOptions
         switch ( $name )
         {
             case 'readOnly':
+            case 'skipUnsafeEntries':
                 if ( !is_bool( $value ) )
                 {
                     throw new ezcBaseValueException( $name, $value, 'bool' );
