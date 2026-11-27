@@ -2,7 +2,7 @@
 
 Create, modify and extract archive files: Tar (ustar, v7, pax and GNU) and Zip.
 
-This is a maintained fork of [zetacomponents/Archive](https://github.com/zetacomponents/Archive)
+This is the Exponential Components fork of [zetacomponents/Archive](https://github.com/zetacomponents/Archive)
 by 7x (se7en.x), kept for Exponential and anyone else who still uses the Zeta Components
 Archive component on current PHP versions. All credit for the component goes to the
 Zeta Components authors listed in `composer.json` and `CREDITS`; the upstream copyright
